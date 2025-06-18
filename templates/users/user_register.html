@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container mt-5">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="idUsername" class="form-label">User Name</label>
+          <input type="text" class="form-control" id="idUsername" name="uname">
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Email address</label>
+            <input type="email" class="form-control" id="exampleInputEmail1" name="eml">
+        </div>
+        <div class="mb-3">
+            <label for="idMobile" class="form-label">Mobile</label>
+            <input type="text" class="form-control" id="idMobile" name="mbl">
+        </div>
+        <div class="mb-3">
+            <label for="idFIrstName" class="form-label">First Name</label>
+            <input type="text" class="form-control" id="idFIrstName" name="fn">
+        </div>
+        <div class="mb-3">
+            <label for="idLastName" class="form-label">Last Name</label>
+            <input type="text" class="form-control" id="idLastName" name="ln">
+        </div>
+        <div class="mb-3">
+            <label for="formFile" class="form-label">Profile Pic</label>
+            <input class="form-control" type="file" id="formFile" name="pro_pic">
+        </div>
+        <div class="mb-3">
+          <label for="idPassword" class="form-label">Password</label>
+          <input type="password" class="form-control" id="idPassword" name="psw">
+        </div>
+        <div class="mb-3">
+            <label for="idConfirmPassword" class="form-label">Confirm Password</label>
+            <input type="password" class="form-control" id="idConfirmPassword" name="cpsw">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+</div>
+{% endblock %}

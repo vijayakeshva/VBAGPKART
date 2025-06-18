@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="idUsername" class="form-label">User Name</label>
+          <input type="text" class="form-control" id="idUsername" name="uname">
+        </div>
+        <div class="mb-3">
+          <label for="idPassword" class="form-label">Password</label>
+          <input type="password" class="form-control" id="idPassword" name="psw">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+</div>
+{% endblock %}

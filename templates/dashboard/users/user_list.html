@@ -1,0 +1,98 @@
+{% extends 'dashboard/dashboard_base.html' %}
+{% block title %}AGPKART - User Lists{% endblock %}
+{% block css %}
+    <style>
+        .header{
+            display: flex;
+            justify-content: space-between;
+        }
+        #userActive{
+            background-color: blue;
+            color: white;
+            padding-inline: 10px;
+            border-radius: 10px;
+        }
+        #userInactive{
+            background-color: red;
+            color: white;
+            padding-inline: 10px;
+            border-radius: 10px;
+        }
+    </style>
+{% endblock  %}
+{% block content %}
+<h1 class="mt-4">User Lists</h1>
+<div class="header">
+    <div>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a href="/super_admin/dashboard/">Dashboard</a></li>
+            <li class="breadcrumb-item active">User List</li>
+        </ol>
+    </div>
+    <div>
+        <a href="/super_admin/user-create/"class="btn btn-primary btn-sm">
+            <i class="fas fa-user-plus me-1"></i>
+            Create User
+        </a>
+    </div>
+</div>
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fas fa-table me-1"></i>
+        User Lists
+    </div>
+    <div class="card-body">
+        <table id="datatablesSimple">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>User Name</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Mobile</th>                    
+                    <th>Active Status</th>                    
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th>#</th>
+                    <th>User Name</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Mobile</th>                    
+                    <th>Active Status</th>                    
+                    <th>Actions</th>
+                </tr>
+            </tfoot>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ forloop.counter}}</td>
+                    <td>{{user.username}}</td>
+                    <td>{{user.first_name}}</td>
+                    <td>{{user.last_name}}</td>
+                    <td>{{user.email}}</td>
+                    <td>{{user.profile.mobile}}</td>
+                    <td>
+                        {% if user.is_active %}
+                           <a href="/super_admin/user-dactivate/{{user.id}}/"><span id="userActive">Active</span></a>
+                        {% else %}
+                           <a href="/super_admin/user-activate/{{user.id}}/"><span id="userInactive">Inactive</span></a>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="/super_admin/user-detail/{{user.id}}/" class="btn btn-primary btn-sm">Detail</a>
+                        <a href="/super_admin/user-update/{{user.id}}/" class="btn btn-warning btn-sm">Update</a>
+                        <a href="#" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+http://127.0.0.1:8000/super_admin/user-list/?active=True

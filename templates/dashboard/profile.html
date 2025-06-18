@@ -1,0 +1,108 @@
+{% extends 'dashboard/dashboard_base.html' %}
+{% block title %}AGPKART - Profile {% endblock %}
+{% block css %}
+    <style>
+        .header{
+            display: flex;
+            justify-content: space-between;
+        }
+        #userActive{
+            background-color: blue;
+            color: white;
+            padding-inline: 10px;
+            border-radius: 10px;
+        }
+        #userInactive{
+            background-color: red;
+            color: white;
+            padding-inline: 10px;
+            border-radius: 10px;
+        }
+    </style>
+{% endblock  %}
+{% block content %}
+<h1 class="mt-4">Profile</h1>
+<div class="header">
+    <div>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a href="/super_admin/dashboard/">Dashboard</a></li>
+            <li class="breadcrumb-item active">Profile</li>
+        </ol>
+    </div>
+    <div>
+        <a href="/super_admin/dashboard/"class="btn btn-primary btn-sm">
+            <i class="fas fa-arrow-left me-1"></i>
+            Dashboard
+        </a>
+    </div>
+</div>
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fas fa-table me-1"></i>
+        User Details
+    </div>
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-4">
+                    {% if user.profile.profile_pic %}
+                        <img src="{{ user.profile.profile_pic.url }}" alt="profile pic" width="300">
+                    {% else %}
+                        <img src="https://media.istockphoto.com/id/1495088043/vector/user-profile-icon-avatar-or-person-icon-profile-picture-portrait-symbol-default-portrait.jpg?s=612x612&w=0&k=20&c=dhV2p1JwmloBTOaGAtaA3AW1KSnjsdMt7-U_3EZElZ0=" alt="profile pic" width="300">
+                    {% endif %}
+                    <div class="mb-3">
+                        <label for="idProfilePic" class="form-label">First Name</label>
+                        <input type="file" class="form-control" id="idProfilePic" name="profile_pic">
+                    </div>
+                </div>
+                <div class="col-8">
+                    <div class="mb-3">
+                        <label for="idUsername" class="form-label">User Name</label>
+                        <input type="text" class="form-control" id="idUsername" value="{{user.username}}" name="username">
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label for="idFirstName" class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="idFirstName" value="{{user.first_name}}" name="first_name">
+                            </div>
+                            <div class="mb-3">
+                                <label for="idLastName" class="form-label">Last Name</label>
+                                <input type="text" class="form-control" id="idLastName" value="{{user.last_name}}" name="last_name">
+                            </div>
+                            <div class="mb-3">
+                                <label for="idEMail" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="idEMail" value="{{user.email}}" name="email">
+                            </div>
+                            <div class="mb-3">
+                                <label for="idJoined" class="form-label">Joined Date</label>
+                                <input type="datetext" class="form-control" id="idJoined" value="{{user.date_joined}}" disabled>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label for="idMobile" class="form-label">Mobile</label>
+                                <input type="text" class="form-control" id="idMobile" value="{{user.profile.mobile}}" name="mobile">
+                            </div>
+                            <div class="mb-3">
+                                <label for="idActiveStatus" class="form-label">Active Status</label>
+                                <input type="text" class="form-control" id="idActiveStatus" value="{% if user.is_active %} Active{% else %} Inactive {% endif %}" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="idLastLmggedIn" class="form-label">Last Logged In</label>
+                                <input type="text" class="form-control" id="idLastLmggedIn" value="{{user.last_login}}" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label for="idUserType" class="form-label">User Tyoe</label>
+                                <input type="text" class="form-control" id="idUserType" value="{{user.profile.user_type}}" disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary w-100 btn-sm">Submit</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

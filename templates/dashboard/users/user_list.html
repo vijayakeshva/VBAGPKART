@@ -46,7 +46,7 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>User Name</th>
+                    {% comment %} <th>User Name</th> {% endcomment %}
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Email</th>
@@ -58,7 +58,7 @@
             <tfoot>
                 <tr>
                     <th>#</th>
-                    <th>User Name</th>
+                    {% comment %} <th>User Name</th> {% endcomment %}
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Email</th>
@@ -71,7 +71,7 @@
                 {% for user in users %}
                 <tr>
                     <td>{{ forloop.counter}}</td>
-                    <td>{{user.username}}</td>
+                    {% comment %} <td>{{user.username}}</td> {% endcomment %}
                     <td>{{user.first_name}}</td>
                     <td>{{user.last_name}}</td>
                     <td>{{user.email}}</td>
@@ -96,3 +96,4 @@
 </div>
 {% endblock %}
 http://127.0.0.1:8000/super_admin/user-list/?active=True
+

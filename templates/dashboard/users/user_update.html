@@ -48,12 +48,43 @@
             </div>
             <div class="mb-3">
                 <label for="inputLastName" class="form-label">Last Name</label>
-                <input type="text" class="form-control" id="inputLastName" name="last_name">
+                <input type="text" class="form-control" id="inputLastName" name="last_name" value"{{user.last_name}}">
             </div>
             <div class="mb-3">
                 <label for="inputMobile" class="form-label">Mobile</label>
-                <input type="number" class="form-control" id="inputMobile" name="mobile">
+                <input type="number" class="form-control" id="inputMobile" name="mobile" value="{{user.mobile}}">
             </div>
+
+             <div class="mb-3">
+            <label>Gender <span style="color: red;"></span></label>
+            <select class="form-select" name="gender" required>
+                <option value="" selected disabled>Select Gender</option>
+                {% for i, j in gender %}
+                    <option value="{{ i }}">{{ j }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label>Role <span style="color: red;"></span></label>
+            <select class="form-select" name="role" required>
+                <option value="" selected disabled>Select Role</option>
+                {% for i, j in role %}
+                    <option value="{{ i }}">{{ j }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label>Department <span style="color: red;"></span></label>
+            <input type="text" class="form-control" name="department" required value="department">
+        </div>
+
+        <div class="mb-3">
+            <label>Employee ID <span style="color: red;"></span></label>
+            <input type="number" class="form-control" name="employee_id" required value="employee_id">
+        </div>
+ 
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>

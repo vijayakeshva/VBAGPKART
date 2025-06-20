@@ -49,6 +49,7 @@ class UserManager(BaseUserManager):
             'platform_user',
             'buyer_user'
         ).get(**kwargs)
+    
 
     def filter_with_profiles(self, **kwargs):
         """Filter users with related profiles in a single query"""

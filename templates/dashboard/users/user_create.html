@@ -30,97 +30,151 @@
         Create User
     </div>
     <div class="card-body">
-        <form method="post" onsubmit="handleSubmit(event)">
-            {% csrf_token %}
-            <div class="mb-3">
-              <label for="inputUsername" class="form-label">Username</label>
-              <input type="text" class="form-control" id="inputUsername" name="username">
-              <div id="idusernameError"></div>
-            </div>
-            <div class="mb-3">
-                <label for="inputEmail" class="form-label">Email Address</label>
-                <input type="email" class="form-control" id="inputEmail" name="email">
-                <div id="idEmailError"></div>
-            </div>
-            <div class="mb-3">
-                <label for="inputFirstName" class="form-label">First Name</label>
-                <input type="text" class="form-control" id="inputFirstName" name="first_name">
-            </div>
-            <div class="mb-3">
-                <label for="inputLastName" class="form-label">Last Name</label>
-                <input type="text" class="form-control" id="inputLastName" name="last_name">
-            </div>
-            <div class="mb-3">
-                <label for="inputMobile" class="form-label">Mobile</label>
-                <input type="number" class="form-control" id="inputMobile" name="mobile">
-            </div>
-            <div class="mb-3">
-              <label for="inputPassword" class="form-label">Password</label>
-              <input type="password" class="form-control" id="inputPassword" name="password">
-            </div>
-            <div class="mb-3">
-                <label for="inputConfirmPassword" class="form-label">Confirm Password</label>
-                <input type="password" class="form-control" id="inputConfirmPassword" name="confirm_password">
-              </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="mb-3">
+            <label>Email Address <span style="color: red;"></span></label>
+            <input type="email" class="form-control" name="email" required>
+        </div>
+
+        <div class="mb-3">
+            <label>First Name</label>
+            <input type="text" class="form-control" name="first_name">
+        </div>
+
+        <div class="mb-3">
+            <label>Last Name</label>
+            <input type="text" class="form-control" name="last_name">
+        </div>
+
+        <div class="mb-3">
+            <label>User Type <span style="color: red;"></span></label>
+            <select class="form-select" name="user_type" required>
+                <option value="" selected disabled>Select User Type</option>
+                {% for i, j in user_type %}
+                    <option value="{{ i }}">{{ j }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label>Phone Number</label>
+            <input type="number" class="form-control" name="phone_number" required>
+        </div>
+
+        <div class="mb-3">
+            <label>Gender <span style="color: red;"></span></label>
+            <select class="form-select" name="gender" required>
+                <option value="" selected disabled>Select Gender</option>
+                {% for i, j in gender %}
+                    <option value="{{ i }}">{{ j }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label>Role <span style="color: red;"></span></label>
+            <select class="form-select" name="role" required>
+                <option value="" selected disabled>Select Role</option>
+                {% for i, j in role %}
+                    <option value="{{ i }}">{{ j }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label>Department <span style="color: red;"></span></label>
+            <input type="text" class="form-control" name="deportment" required>
+        </div>
+
+        <div class="mb-3">
+            <label>Employee ID <span style="color: red;"></span></label>
+            <input type="number" class="form-control" name="employee_id" required>
+        </div>
+
+         <div class="mb-3">
+            <label>Password <span style="color: red;"></span></label>
+            <input type="password" class="form-control" name="password" required>
+        </div>
+
+        <div class="mb-3">
+            <label>Confirm Password <span style="color: red;"></span></label>
+            <input type="password" class="form-control" name="confirm_password" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
     </div>
 </div>
 {% endblock %}
+
 {% block js %}
-<script>
-function handleSubmit(event){
+ <script>
+  function handleSubmit(event){
+
     event.preventDefault()
-
-
     let isFormValid=true;
-
-    let usernameValue = document.getElementById("inputUsername").value.trim();
-    let errorUsernameElement = document.getElementById("idusernameError");
-
-    let emailValue = document.getElementById("inputEmail").value.trim();
-    let errorEmailElement = document.getElementById("idEmailError");
-
-    errorUsernameElement.textContent="";
-    errorEmailElement.textContent="";
     
-    fetch('/super_admin/check-username/', {
-        method: 'POST', // Specify the method
-        body: JSON.stringify({
-            username: usernameValue
-        })
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            if(data.is_exists){
-            errorUsernameElement.textContent="This Username is already taken";
-            errorUsernameElement.style.color="red";
-            }
-        })
-        .catch(error => {
-        console.error('Error:', error);
-        });
-    if(usernameValue==""){
-        errorUsernameElement.textContent="Please enter your username";
-        errorUsernameElement.style.color="red";
-        isFormValid=false;
-    }if(emailValue==""){
-        errorEmailElement.textContent="Please enter your email";
-        errorEmailElement.style.color="red";
-        isFormValid=false;
+    let  firstnamevalue=document.getElementById("exampleInputfirstname1").value.trim();
+    let errorFirstnameElement=document.getElementById("idEFirstnameError");
+    
+    let Lasttnamevalue=document.getElementById("exampleInput1").vLastnamealue.trim();
+    let errorLastnameElement=document.getElementById("idLastnameError");
+
+    let Emailvalue=document.getElementById("exampleInputEmail1").value.trim();
+    let errorEmailElement=document.getElementById("idLastEmailError");
+
+    let Phone_numbervalue=document.getElementById("exampleInputPhone_number1").value.trim();
+    let errorPhone_numberElement=document.getElementById("idPhone_numberError")
+
+    let passwordvalue=document.getElementById("exampleInputPassword1").value.trim();
+    let errorPasswordElement=document.getElementById("idPasswordError")
+
+    let cpasswordvalue=document.getElementById("exampleInputCPassword1").value.trim();
+    let errorCpasswordElement=document.getElementById("idCpasswordError")
+
+    if(firstnamevalue==""){
+      errorEmailElement.textContent="please enter your firstname";
+      errorfirstnameElement.style.color="red";
+      isFormValid=false;
     }
 
-
-
-
-
-
-    
-    let form= event.target;
-    if(isFormValid){
-        form.submit()
+    if(lastnamenamevalue==""){
+      errorFirstnameElement.textContent="please enter your last name";
+      errorlastnameElement.style.color="red";
+      isFormValid=false;
     }
-}
+
+    if(emailvalue==""){
+      errorLastnameElement.textContent="please enter your email";
+      erroremailElement.style.color="red";
+      isFormValid=false;
+    }
+
+    if(phone_numbervalue==""){
+      errorphone_numberElement.textContent="please enter your phone_number";
+      errorphone_numberElement.style.color="red";
+      isFormValid=false;
+    }
+
+    if(passwordvalue==""){
+      errorPasswordElement.textContent="please enter your password";
+      errorPasswordElement.style.color="red";
+      isFormValid=false;
+    }
+
+    if(cpasswordvalue==""){
+      errorCpasswordElement.textContent="please enter your confirm password";
+      errorCpasswordElement.style.color="red";
+      isFormValid=false:
+        
+        let form= event.target;
+        if(isFormValid){
+            form.submit()
+        }
+    }
 </script>
+
 {% endblock %}

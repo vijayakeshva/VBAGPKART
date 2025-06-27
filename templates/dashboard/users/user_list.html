@@ -1,99 +1,140 @@
 {% extends 'dashboard/dashboard_base.html' %}
 {% block title %}AGPKART - User Lists{% endblock %}
+
 {% block css %}
-    <style>
-        .header{
-            display: flex;
-            justify-content: space-between;
-        }
-        #userActive{
-            background-color: blue;
-            color: white;
-            padding-inline: 10px;
-            border-radius: 10px;
-        }
-        #userInactive{
-            background-color: red;
-            color: white;
-            padding-inline: 10px;
-            border-radius: 10px;
-        }
-    </style>
-{% endblock  %}
+<style>
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    #userActive {
+        background-color: blue;
+        color: white;
+        padding: 2px 10px;
+        border-radius: 10px;
+    }
+    #userInactive {
+        background-color: red;
+        color: white;
+        padding: 2px 10px;
+        border-radius: 10px;
+    }
+    .modal-header {
+        background-color: #dc3545;
+    }
+    .modal-title {
+        color: white;
+    }
+    /* Optional: smooth horizontal scroll on mobile */
+    .table-responsive-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <h1 class="mt-4">User Lists</h1>
+
 <div class="header">
-    <div>
-        <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item"><a href="/super_admin/dashboard/">Dashboard</a></li>
-            <li class="breadcrumb-item active">User List</li>
-        </ol>
-    </div>
-    <div>
-        <a href="/super_admin/user-create/"class="btn btn-primary btn-sm">
-            <i class="fas fa-user-plus me-1"></i>
-            Create User
-        </a>
-    </div>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="/super_admin/dashboard/">Dashboard</a></li>
+        <li class="breadcrumb-item active">User List</li>
+    </ol>
+    <a href="/super_admin/user-create/" class="btn btn-primary btn-sm">
+        <i class="fas fa-user-plus me-1"></i> Create User
+    </a>
 </div>
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+
 <div class="card mb-4">
     <div class="card-header">
-        <i class="fas fa-table me-1"></i>
-        User Lists
+        <i class="fas fa-table me-1"></i> User Lists
     </div>
     <div class="card-body">
-        <table id="datatablesSimple">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    {% comment %} <th>User Name</th> {% endcomment %}
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Email</th>
-                    <th>Mobile</th>                    
-                    <th>Active Status</th>                    
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tfoot>
-                <tr>
-                    <th>#</th>
-                    {% comment %} <th>User Name</th> {% endcomment %}
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Email</th>
-                    <th>Mobile</th>                    
-                    <th>Active Status</th>                    
-                    <th>Actions</th>
-                </tr>
-            </tfoot>
-            <tbody>
-                {% for user in users %}
-                <tr>
-                    <td>{{ forloop.counter}}</td>
-                    {% comment %} <td>{{user.username}}</td> {% endcomment %}
-                    <td>{{user.first_name}}</td>
-                    <td>{{user.last_name}}</td>
-                    <td>{{user.email}}</td>
-                    <td>{{user.profile.mobile}}</td>
-                    <td>
+        <div class="table-responsive-wrapper">
+            <table id="datatablesSimple" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Email</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Phone Number</th>
+                        <th>Gender</th>
+                        <th>Role</th>
+                        <th>Department</th>
+                        <th>Employee ID</th>
+                        <th>Active status</th>
+                        <th colspan="3">Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.first_name }}</td>
+                        <td>{{ user.last_name }}</td>
+                        <td>{{ user.phone_number }}</td>
+                        <td>{{ user.gender }}</td>
+                        <td>{{ user.platform_user.role }}</td>
+                        <td>{{ user.platform_user.department }}</td>
+                        <td>{{ user.platform_user.employee_id }}</td>
+                        <td>
                         {% if user.is_active %}
                            <a href="/super_admin/user-dactivate/{{user.id}}/"><span id="userActive">Active</span></a>
                         {% else %}
                            <a href="/super_admin/user-activate/{{user.id}}/"><span id="userInactive">Inactive</span></a>
                         {% endif %}
-                    </td>
-                    <td>
-                        <a href="/super_admin/user-detail/{{user.id}}/" class="btn btn-primary btn-sm">Detail</a>
-                        <a href="/super_admin/user-update/{{user.id}}/" class="btn btn-warning btn-sm">Update</a>
-                        <a href="#" class="btn btn-danger btn-sm">Delete</a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                        </td>
+                        <td>
+                            <a href="/super_admin/user-detail/{{ user.id }}/" class="btn btn-primary btn-sm">
+                                <i class="fa fa-eye"></i></a>
+                        </td>
+                        <td>
+                            <a href="/super_admin/user-update/{{ user.id }}/" class="btn btn-warning btn-sm">
+                                <i class="fa-solid fa-pen"></i></a>
+                        </td>
+                        <td> 
+                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ user.id }}">
+                                <i class="fa-solid fa-trash"></i>     
+                            </button>
+                            
+                            <!-- Delete Confirmation Modal -->
+                            <div class="modal fade" id="deleteModal{{ user.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ user.id }}" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header text-white bg-danger">
+                                            <h5 class="modal-title" id="deleteModalLabel{{ user.id }}">Confirm Deletion</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure you want to delete <strong>{{ user.first_name }} {{ user.last_name }}</strong>?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            <a href="/super_admin/user-delete/{{ user.id }}/" class="btn btn-danger">Yes, Delete</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> 
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div> <!-- /.table-responsive-wrapper -->
     </div>
 </div>
 {% endblock %}
-http://127.0.0.1:8000/super_admin/user-list/?active=True
-

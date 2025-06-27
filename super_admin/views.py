@@ -73,21 +73,48 @@ def super_admin_user_create_view(request):
         'gender': gender,
         'role': role
     })
-
-def super_admin_user_update_view(request, pk):
-    # user = User.objects.get(id=pk)
+def super_admin_user_update_view(request,pk):
     user = get_object_or_404(User, id=pk)
-    if request.method=="POST":
-        data = request.POST
-        username = data.get("uname")
 
-        user.username=username
-        # user.profile.mobile=mobile
+    try:
+        platform_user = user.platform_user  
+    except PlatformUser.DoesNotExist:
+        platform_user = None
+
+    if request.method == "POST":
+        user.email = request.POST.get("email")
+        user.first_name = request.POST.get("first_name")
+        user.last_name = request.POST.get("last_name")
+        user.phone_number = request.POST.get("phone_number")
+        user.gender = request.POST.get("gender")
+
+        password = request.POST.get("password")
+        confirm_password = request.POST.get("confirm_password")
+
+        if password and password == confirm_password:
+            user.set_password(password)
+
         user.save()
 
-    return render(request, "dashboard/users/user_update.html", {'user': user})
+    
+        if platform_user:
+            platform_user.role = request.POST.get("role")
+            platform_user.department = request.POST.get("department")
+            platform_user.employee_id = request.POST.get("employee_id")
+            platform_user.save()
+
+       # messages.success(request, "User updated successfully!")
+
+    return render(request, "dashboard/users/user_update.html", {
+        "user": user,
+        "role": PlatformUser.Role.choices,
+    })
+
+
 def super_admin_user_delete_view(request, pk):
-    return redirect(".")
+    user =User.objects.get(id=pk)
+    user.delete()
+    return redirect("/super_admin/user-list/")
 
 def super_admin_user_activate_view(request, pk):
     user = get_object_or_404(User, id=pk)

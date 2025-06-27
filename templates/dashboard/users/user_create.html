@@ -1,180 +1,223 @@
 {% extends 'dashboard/dashboard_base.html' %}
+
 {% block title %}Create User - AGPKART{% endblock %}
+
 {% block css %}
-    <style>
-        .header{
-            display: flex;
-            justify-content: space-between;
-        }
-    </style>
-{% endblock  %}
+<style>
+    .header {
+        display: flex;
+        justify-content: space-between;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <h1 class="mt-4">Create User</h1>
+
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  {% endfor %}
+{% endif %}
+
 <div class="header">
-    <div>
-        <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item"><a href="/super_admin/dashboard/">Dashboard</a></li>
-            <li class="breadcrumb-item active">Create User</li>
-        </ol>
-    </div>
-    <div>
-        <a href="/super_admin/user-list/"class="btn btn-primary btn-sm">
-            <i class="fas fa-arrow-left me-1"></i>
-            User lists
-        </a>
-    </div>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="/super_admin/dashboard/">Dashboard</a></li>
+        <li class="breadcrumb-item active">Create User</li>
+    </ol>
+    
+    <a href="/super_admin/user-list/" class="btn btn-primary mb-3 float-right">
+        <i class="fas fa-arrow-left me-1"></i> User lists
+    </a>
 </div>
+
 <div class="card mb-4">
-    <div class="card-header">
-        <i class="fas fa-table me-1"></i>
-        Create User
-    </div>
+    <div class="card-header"><i class="fas fa-table me-1"></i> Create User</div>
     <div class="card-body">
-    <form method="post">
-        {% csrf_token %}
-        
-        <div class="mb-3">
-            <label>Email Address <span style="color: red;"></span></label>
-            <input type="email" class="form-control" name="email" required>
-        </div>
+        <form method="post" onsubmit="handleSubmit(event)">
+            {% csrf_token %}
+            
+            <div class="mb-3">
+                <label class="form-label">Email Address *</label>
+                <input type="email" class="form-control" id="inputEmail" name="email">
+                <div id="idEmailError" class="text-danger small"></div>
+            </div>
 
-        <div class="mb-3">
-            <label>First Name</label>
-            <input type="text" class="form-control" name="first_name">
-        </div>
+            <div class="mb-3">
+                <label class="form-label">First Name *</label>
+                <input type="text" class="form-control" id="inputFirstName" name="first_name">
+                <div id="idFirstnameError" class="text-danger small"></div>
+            </div>
 
-        <div class="mb-3">
-            <label>Last Name</label>
-            <input type="text" class="form-control" name="last_name">
-        </div>
+            <div class="mb-3">
+                <label class="form-label">Last Name</label>
+                <input type="text" class="form-control" id="inputLastName" name="last_name">
+                <div id="idLasttnameError" class="text-danger small"></div>
+            </div>
 
-        <div class="mb-3">
-            <label>User Type <span style="color: red;"></span></label>
-            <select class="form-select" name="user_type" required>
-                <option value="" selected disabled>Select User Type</option>
-                {% for i, j in user_type %}
-                    <option value="{{ i }}">{{ j }}</option>
-                {% endfor %}
-            </select>
-        </div>
+            <input type="hidden" name="user_type" value="PLATFORM">
 
-        <div class="mb-3">
-            <label>Phone Number</label>
-            <input type="number" class="form-control" name="phone_number" required>
-        </div>
+            <div class="mb-3">
+                <label class="form-label">Phone Number</label>
+                <input type="tel" class="form-control" id="inputphone_number" name="phone_number">
+                <div id="idPhonenumberError" class="text-danger small"></div>
+            </div>
 
-        <div class="mb-3">
-            <label>Gender <span style="color: red;"></span></label>
-            <select class="form-select" name="gender" required>
-                <option value="" selected disabled>Select Gender</option>
-                {% for i, j in gender %}
-                    <option value="{{ i }}">{{ j }}</option>
-                {% endfor %}
-            </select>
-        </div>
+            <div class="mb-3">
+                <label class="form-label">Gender *</label>
+                <select class="form-select" id="inputGender" name="gender">
+                    <option value="">-- Select Gender --</option>
+                    <option value="MALE">Male</option>
+                    <option value="FEMALE">Female</option>
+                    <option value="OTHER">Other</option>
+                </select>
+                <div id="idGenderError" class="text-danger small"></div>
+            </div>
 
-        <div class="mb-3">
-            <label>Role <span style="color: red;"></span></label>
-            <select class="form-select" name="role" required>
-                <option value="" selected disabled>Select Role</option>
-                {% for i, j in role %}
-                    <option value="{{ i }}">{{ j }}</option>
-                {% endfor %}
-            </select>
-        </div>
+            <div class="mb-3">
+                <label class="form-label">Password *</label>
+                <input type="password" class="form-control" id="inputPassword" name="password">
+                <div id="idPasswordError" class="text-danger small"></div>
+            </div>
 
-        <div class="mb-3">
-            <label>Department <span style="color: red;"></span></label>
-            <input type="text" class="form-control" name="deportment" required>
-        </div>
+            <div class="mb-3">
+                <label class="form-label">Confirm Password *</label>
+                <input type="password" class="form-control" id="inputConfirmPassword" name="confirm_password">
+                <div id="idConfirmPasswordError" class="text-danger small"></div>
+            </div>
 
-        <div class="mb-3">
-            <label>Employee ID <span style="color: red;"></span></label>
-            <input type="number" class="form-control" name="employee_id" required>
-        </div>
+            <div class="mb-3">
+                <label class="form-label">Role *</label>
+                <select class="form-select" id="inputRole" name="role">
+                    <option value="" disabled selected>Select Role</option>
+                    {% for i, j in role %}
+                        <option value="{{ i }}">{{ j }}</option>
+                    {% endfor %}
+                </select>
+                <div id="idRoleError" class="text-danger small"></div>
+            </div>
 
-         <div class="mb-3">
-            <label>Password <span style="color: red;"></span></label>
-            <input type="password" class="form-control" name="password" required>
-        </div>
+            <div class="mb-3">
+                <label class="form-label">Department *</label>
+                <input type="text" class="form-control" id="inputDepartment" name="department">
+                <div id="idDepartmentError" class="text-danger small"></div>
+            </div>
 
-        <div class="mb-3">
-            <label>Confirm Password <span style="color: red;"></span></label>
-            <input type="password" class="form-control" name="confirm_password" required>
-        </div>
+            <div class="mb-3">
+                <label class="form-label">Employee ID *</label>
+                <input type="text" class="form-control" id="inputEmployee_id" name="employee_id">
+                <div id="idEmployee_idError" class="text-danger small"></div>
+            </div>
+            
 
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
     </div>
 </div>
 {% endblock %}
 
 {% block js %}
- <script>
-  function handleSubmit(event){
+<script>
+  function handleSubmit(event) {
+    event.preventDefault();
 
-    event.preventDefault()
-    let isFormValid=true;
+    let isFormValid = true;
+
     
-    let  firstnamevalue=document.getElementById("exampleInputfirstname1").value.trim();
-    let errorFirstnameElement=document.getElementById("idEFirstnameError");
+    document.querySelectorAll('.text-danger').forEach(el => el.textContent = '');
+
+    let emailvalue = document.getElementById("inputEmail").value.trim();
+    let errorEmailElement = document.getElementById("idEmailError");
+
+    let firstnamevalue = document.getElementById("inputFirstName").value.trim();
+    let errorFirstNameElement = document.getElementById("idFirstnameError");
+
+    let lastnamevalue = document.getElementById("inputLastName").value.trim();
+    let errorLastNameElement = document.getElementById("idLasttnameError");
+
+    let phonenumbervalue = document.getElementById("inputphone_number").value.trim();
+    let errorPhonenumberElement = document.getElementById("idPhonenumberError");
+
+    let gendervalue = document.getElementById("inputGender").value.trim();
+    let errorGenderElement = document.getElementById("idGenderError");
+
+    let passwordvalue = document.getElementById("inputPassword").value.trim();
+    let errorPasswordElement = document.getElementById("idPasswordError");
+
+    let confirmpasswordvalue = document.getElementById("inputConfirmPassword").value.trim();
+    let errorConfirmPasswordElement = document.getElementById("idConfirmPasswordError");
+
+    let rolevalue = document.getElementById("inputRole").value.trim();
+    let errorRoleElement = document.getElementById("idRoleError");
+
+    let departmentvalue = document.getElementById("inputDepartment").value.trim();
+    let errorDepartmentElement = document.getElementById("idDepartmentError");
+
+    let employee_idvalue = document.getElementById("inputEmployee_id").value.trim();
+    let errorEmployee_idElement = document.getElementById("idEmployee_idError");
+
     
-    let Lasttnamevalue=document.getElementById("exampleInput1").vLastnamealue.trim();
-    let errorLastnameElement=document.getElementById("idLastnameError");
-
-    let Emailvalue=document.getElementById("exampleInputEmail1").value.trim();
-    let errorEmailElement=document.getElementById("idLastEmailError");
-
-    let Phone_numbervalue=document.getElementById("exampleInputPhone_number1").value.trim();
-    let errorPhone_numberElement=document.getElementById("idPhone_numberError")
-
-    let passwordvalue=document.getElementById("exampleInputPassword1").value.trim();
-    let errorPasswordElement=document.getElementById("idPasswordError")
-
-    let cpasswordvalue=document.getElementById("exampleInputCPassword1").value.trim();
-    let errorCpasswordElement=document.getElementById("idCpasswordError")
-
-    if(firstnamevalue==""){
-      errorEmailElement.textContent="please enter your firstname";
-      errorfirstnameElement.style.color="red";
-      isFormValid=false;
+    if (emailvalue === "") {
+      errorEmailElement.textContent = "Please enter your email";
+      isFormValid = false;
     }
 
-    if(lastnamenamevalue==""){
-      errorFirstnameElement.textContent="please enter your last name";
-      errorlastnameElement.style.color="red";
-      isFormValid=false;
+    if (firstnamevalue === "") {
+      errorFirstNameElement.textContent = "Please enter your first name";
+      isFormValid = false;
     }
 
-    if(emailvalue==""){
-      errorLastnameElement.textContent="please enter your email";
-      erroremailElement.style.color="red";
-      isFormValid=false;
+    if (lastnamevalue === "") {
+      errorLastNameElement.textContent = "Please enter your last name";
+      isFormValid = false;
     }
 
-    if(phone_numbervalue==""){
-      errorphone_numberElement.textContent="please enter your phone_number";
-      errorphone_numberElement.style.color="red";
-      isFormValid=false;
+    if (phonenumbervalue === "") {
+      errorPhonenumberElement.textContent = "Please enter your phone number";
+      isFormValid = false;
     }
 
-    if(passwordvalue==""){
-      errorPasswordElement.textContent="please enter your password";
-      errorPasswordElement.style.color="red";
-      isFormValid=false;
+    if (gendervalue === "") {
+      errorGenderElement.textContent = "Please select your gender";
+      isFormValid = false;
     }
 
-    if(cpasswordvalue==""){
-      errorCpasswordElement.textContent="please enter your confirm password";
-      errorCpasswordElement.style.color="red";
-      isFormValid=false:
-        
-        let form= event.target;
-        if(isFormValid){
-            form.submit()
-        }
+    if (passwordvalue === "") {
+      errorPasswordElement.textContent = "Please enter your password";
+      isFormValid = false;
     }
+
+    if (confirmpasswordvalue === "") {
+      errorConfirmPasswordElement.textContent = "Please confirm your password";
+      isFormValid = false;
+    }
+
+    if (passwordvalue !== confirmpasswordvalue) {
+      errorConfirmPasswordElement.textContent = "Passwords do not match";
+      isFormValid = false;
+    }
+
+    if (rolevalue === "") {
+      errorRoleElement.textContent = "Please select your role";
+      isFormValid = false;
+    }
+
+    if (departmentvalue === "") {
+      errorDepartmentElement.textContent = "Please enter your department";
+      isFormValid = false;
+    }
+
+    if (employee_idvalue === "") {
+      errorEmployee_idElement.textContent = "Please enter your employee ID";
+      isFormValid = false;
+    }
+
+    if (isFormValid) {
+      event.target.submit();
+    }
+  }
 </script>
-
 {% endblock %}
